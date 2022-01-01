@@ -87,7 +87,7 @@
 </head>
 <body>
     <div class="background">
-        <img id="background-img" src="./src/img/background/bk.jpg"/>
+        <img id="background-img"/>
         <div class="background-mask"></div>
     </div>
     <div class="box">
@@ -113,7 +113,10 @@
     </div>
 </body>
 <script>
-    function resize_background() {
+    var BACKGROUND_IMAGE_MAX_INDEX = 3
+    var BACKGROUND_IMAGE_MIN_INDEX = 1
+
+    function resizeBackground() {
         window_ratio = $(window).width() / $(window).height()
         background_img_ratio = $("#background-img").width() / $("#background-img").height()
         if (background_img_ratio >= window_ratio) {
@@ -124,7 +127,8 @@
             $("#background-img").css("height", "auto")
         }
     }
-    function link_box_add_mouse_events(id) {
+
+    function linkBoxAddMouseEvents(id) {
         $(id).mouseenter(function() {
             $(id).animate({opacity: 1}, 500, "linear", function() {
                 $(id).css("opacity", 1)
@@ -136,12 +140,20 @@
             })
         })
     }
+
+    function chooseBackgroundImage(min_index, max_index) {
+        var rand = parseInt(Math.random() * (max_index - min_index + 1) + min_index)
+        var image_path = "./src/img/background/" + rand + ".jpg"
+        $("#background-img").attr("src", image_path)
+    }
+
     $(document).ready(function() {
-        resize_background()
-        link_box_add_mouse_events("#link-box-1")
+        resizeBackground()
+        linkBoxAddMouseEvents("#link-box-1")
+        chooseBackgroundImage(BACKGROUND_IMAGE_MIN_INDEX, BACKGROUND_IMAGE_MAX_INDEX)
     })
     $(window).resize(function() {
-        resize_background()
+        resizeBackground()
     })
 </script>
 </html>
