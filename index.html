@@ -148,9 +148,11 @@
     }
 
     $(document).ready(function() {
-        resizeBackground()
-        linkBoxAddMouseEvents("#link-box-1")
         chooseBackgroundImage(BACKGROUND_IMAGE_MIN_INDEX, BACKGROUND_IMAGE_MAX_INDEX)
+        linkBoxAddMouseEvents("#link-box-1")
+    })
+    $(window).load(function() {
+        resizeBackground()
     })
     $(window).resize(function() {
         resizeBackground()
