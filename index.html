@@ -113,7 +113,24 @@
     </div>
 </body>
 <script>
-    var background_image_dataset = null
+    var background_image_dataset = {
+        "data": ["1", "2", "3"],
+        "1": {
+            "relative_path": "./src/img/background/1.jpg",
+            "anchorX": 0.271,
+            "anchorY": 0.407
+        },
+        "2": {
+            "relative_path": "./src/img/background/2.jpg",
+            "anchorX": 0.283,
+            "anchorY": 0.486
+        },
+        "3": {
+            "relative_path": "./src/img/background/3.jpg",
+            "anchorX": 0.3515,
+            "anchorY": 0.4373
+        }
+    }
     var chosen_bg_image = null  // avalible for test
 
     function resizeBackground() {
@@ -157,10 +174,6 @@
     }
 
     $(document).ready(function() {
-        $.ajaxSettings.async = false
-        background_image_dataset = $.getJSON("./src/json/background_image.json").responseJSON
-        $.ajaxSettings.async = true
-
         chooseBackgroundImage(background_image_dataset.data)
         linkBoxAddMouseEvents("#link-box-1")
     })
