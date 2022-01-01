@@ -114,44 +114,60 @@
 </body>
 <script>
     var background_image_dataset = {
-        "data": ["1", "2", "3"],
-        "1": {
-            "relative_path": "./src/img/background/1.jpg",
-            "anchorX": 0.271,
-            "anchorY": 0.407
+        data: ["1", "2", "3"],
+        1: {
+            relative_path: "./src/img/background/1.jpg",
+            width: 1275,
+            height: 717,
+            anchorX: 0.271,
+            anchorY: 0.407
         },
-        "2": {
-            "relative_path": "./src/img/background/2.jpg",
-            "anchorX": 0.283,
-            "anchorY": 0.486
+        2: {
+            relative_path: "./src/img/background/2.jpg",
+            width: 1200,
+            height: 675,
+            anchorX: 0.283,
+            anchorY: 0.486
         },
-        "3": {
-            "relative_path": "./src/img/background/3.jpg",
-            "anchorX": 0.3515,
-            "anchorY": 0.4373
+        3: {
+            relative_path: "./src/img/background/3.jpg",
+            width: 947,
+            height: 670,
+            anchorX: 0.3515,
+            anchorY: 0.4373
         }
     }
     var chosen_bg_image = null  // avalible for test
 
-    function resizeBackground() {
-        var centerX = $(window).width() * 0.5
-        var centerY = $(window).height() * 0.5
-        var window_ratio = $(window).width() / $(window).height()
-        var background_img_ratio = $("#background-img").width() / $("#background-img").height()
+    function resizeBackground(bg_img_width, bg_img_height) {
+        var window_width = $(window).width()
+        var window_height = $(window).height()
+        var centerX = window_width * 0.5
+        var centerY = window_height * 0.5
+        var window_ratio = window_width / window_height
+        var background_img_ratio = bg_img_width / bg_img_height
 
         if (background_img_ratio >= window_ratio) {
-            $("#background-img").css("height", "100%")
-            $("#background-img").css("width", "auto")
-
-            //var anchorX = $("#background-img").width() * chosen_bg_image.anchorX
-            //$("#background-img").css("transform", "translateX(" + ((centerX - anchorX) < 0 ? (centerX - anchorX) : 0) + "px)")
+            var anchorX = window_height * background_img_ratio * chosen_bg_image.anchorX
+            $("#background-img").css({
+                height: "100%",
+                width: "auto",
+                transform: "translateX(" + ((centerX - anchorX) < 0 ? (centerX - anchorX) : 0) + "px)"
+            })
         } else {
-            $("#background-img").css("width", "100%")
-            $("#background-img").css("height", "auto")
-
-            //var anchorY = $("#background-img").height() * chosen_bg_image.anchorY
-            //$("#background-img").css("transform", "translateY(" + ((centerY - anchorY) < 0 ? (centerY - anchorY) : 0) +"px)")
+            var anchorY = window_width / background_img_ratio * chosen_bg_image.anchorY
+            $("#background-img").css({
+                height: "auto",
+                width: "100%",
+                transform: "translateY(" + ((centerY - anchorY) < 0 ? (centerY - anchorY) : 0) +"px)"
+            })
         }
+    }
+
+    function chooseBackgroundImage(dataset) {
+        var rand = parseInt(Math.random() * dataset.length)
+        chosen_bg_image = chosen_bg_image || background_image_dataset[dataset[rand]]
+        $("#background-img").attr("src", chosen_bg_image.relative_path)
     }
 
     function linkBoxAddMouseEvents(id) {
@@ -167,21 +183,13 @@
         })
     }
 
-    function chooseBackgroundImage(dataset) {
-        var rand = parseInt(Math.random() * dataset.length)
-        chosen_bg_image = chosen_bg_image || background_image_dataset[dataset[rand]]
-        $("#background-img").attr("src", chosen_bg_image.relative_path)
-    }
-
     $(document).ready(function() {
         chooseBackgroundImage(background_image_dataset.data)
+        resizeBackground(chosen_bg_image.width, chosen_bg_image.height)
         linkBoxAddMouseEvents("#link-box-1")
     })
-    $(window).on("load", function() {
-        resizeBackground()
-    })
     $(window).resize(function() {
-        resizeBackground()
+        resizeBackground(chosen_bg_image.width, chosen_bg_image.height)
     })
 </script>
 </html>
