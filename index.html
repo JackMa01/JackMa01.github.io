@@ -7,7 +7,7 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Jack Ma</title>
     <style>
-        .background, .box, .content, .avatar, .name, .intro, .links, .link-box {
+        .box, .content, .avatar, .name, .intro, .links, .link-box {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -113,18 +113,27 @@
     </div>
 </body>
 <script>
-    var BACKGROUND_IMAGE_MAX_INDEX = 3
-    var BACKGROUND_IMAGE_MIN_INDEX = 1
+    var background_image_dataset = null
+    var chosen_bg_image = null  // avalible for test
 
     function resizeBackground() {
-        window_ratio = $(window).width() / $(window).height()
-        background_img_ratio = $("#background-img").width() / $("#background-img").height()
+        var centerX = $(window).width() * 0.5
+        var centerY = $(window).height() * 0.5
+        var window_ratio = $(window).width() / $(window).height()
+        var background_img_ratio = $("#background-img").width() / $("#background-img").height()
+
         if (background_img_ratio >= window_ratio) {
             $("#background-img").css("height", "100%")
             $("#background-img").css("width", "auto")
+
+            var anchorX = $("#background-img").width() * chosen_bg_image.anchorX
+            $("#background-img").css("transform", "translateX(" + ((centerX - anchorX) < 0 ? (centerX - anchorX) : 0) + "px)")
         } else {
             $("#background-img").css("width", "100%")
             $("#background-img").css("height", "auto")
+
+            var anchorY = $("#background-img").height() * chosen_bg_image.anchorY
+            $("#background-img").css("transform", "translateY(" + ((centerY - anchorY) < 0 ? (centerY - anchorY) : 0) +"px)")
         }
     }
 
@@ -141,17 +150,21 @@
         })
     }
 
-    function chooseBackgroundImage(min_index, max_index) {
-        var rand = parseInt(Math.random() * (max_index - min_index + 1) + min_index)
-        var image_path = "./src/img/background/" + rand + ".jpg"
-        $("#background-img").attr("src", image_path)
+    function chooseBackgroundImage(dataset) {
+        var rand = parseInt(Math.random() * dataset.length)
+        chosen_bg_image = chosen_bg_image || background_image_dataset[dataset[rand]]
+        $("#background-img").attr("src", chosen_bg_image.relative_path)
     }
 
     $(document).ready(function() {
-        chooseBackgroundImage(BACKGROUND_IMAGE_MIN_INDEX, BACKGROUND_IMAGE_MAX_INDEX)
+        $.ajaxSettings.async = false
+        background_image_dataset = $.getJSON("./src/json/background_image.json").responseJSON
+        $.ajaxSettings.async = true
+
+        chooseBackgroundImage(background_image_dataset.data)
         linkBoxAddMouseEvents("#link-box-1")
     })
-    $(window).load(function() {
+    $(window).on("load", function() {
         resizeBackground()
     })
     $(window).resize(function() {
