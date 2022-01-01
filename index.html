@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Jack Ma</title>
+    <style>
+        .background, .box, .content, .avatar, .name, .intro, .links, .link-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .background, .box {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+        }
+        .background {
+            overflow: hidden;
+        }
+        .background-mask {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(140deg, rgba(68,68,68,0.6) 20%, rgba(0,0,0,0.9));
+            background-color: rgba(68,68,68,0.6);
+        }
+        .avatar-box {
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        #avatar-img{
+            width: 100%;
+            height: 100%;
+        }
+        .interval {
+            height: 1px;
+            background-color: rgba(255,255,255,0.14);
+            margin: 20px auto;
+        }
+        #interval-1 {
+            width: 200px;
+        } 
+        #interval-2 {
+            width: 100px;
+        }
+        .name {
+            margin-top: 20px;
+            color: white;
+            font-size: 2.5em;
+            letter-spacing: 4px;
+        }
+        .intro {
+            color: white;
+            font-size: 0.9em;
+        }
+        .intro div {
+            margin: 2px;
+        }
+        .link-box {
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid white;
+            opacity: 0.8;
+        }
+        .link-img {
+            width: 60%;
+            height: 60%;
+        }
+        @media only screen and (min-width: 700px) {
+            .intro {
+                flex-direction: row;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <img id="background-img" src="./src/img/background/bk.jpg"/>
+        <div class="background-mask"></div>
+    </div>
+    <div class="box">
+        <div class="content">
+            <div class="avatar">
+                <div class="avatar-box">
+                    <img id="avatar-img" src="./src/img/avatar/avatar.png"/>
+                </div>
+            </div>
+            <div class="name">
+                Jack Ma
+            </div>
+            <div class="interval" id="interval-1"></div>
+            <div class="intro">
+                <div>Senior undergraduate student at</div>
+                <div>Huazhong University of Science and Technology</div>
+            </div>
+            <div class="interval" id="interval-2"></div>
+            <div class="links">
+                <a class="link-box" id="link-box-1" href="https://github.com/JackMa01">
+                    <img class="link-img" src="./src/img/icon/github.png"/>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function resize_background() {
+        window_ratio = $(window).width() / $(window).height()
+        background_img_ratio = $("#background-img").width() / $("#background-img").height()
+        if (background_img_ratio >= window_ratio) {
+            $("#background-img").css("height", "100%")
+            $("#background-img").css("width", "auto")
+        } else {
+            $("#background-img").css("width", "100%")
+            $("#background-img").css("height", "auto")
+        }
+    }
+    function link_box_add_mouse_events(id) {
+        $(id).mouseenter(function() {
+            $(id).animate({opacity: 1}, 500, "linear", function() {
+                $(id).css("opacity", 1)
+            })
+        })
+        $(id).mouseleave(function() {
+            $(id).animate({opacity: 0.8}, 100, "linear", function() {
+                $(id).css("opacity", 0.8)
+            })
+        })
+    }
+    $(document).ready(function() {
+        resize_background()
+        link_box_add_mouse_events("#link-box-1")
+    })
+    $(window).resize(function() {
+        resize_background()
+    })
+</script>
+</html>
