@@ -169,18 +169,38 @@
         var background_img_ratio = bg_img_width / bg_img_height
 
         if (background_img_ratio >= window_ratio) {
-            var anchorX = window_height * background_img_ratio * chosen_bg_image.anchorX
+            var scaled_width = window_height * background_img_ratio
+            var anchorX = scaled_width * chosen_bg_image.anchorX
+            var deltaX = 0
+            if (centerX - anchorX < 0) {
+                deltaX = centerX - anchorX
+                if (scaled_width + deltaX < window_width) {
+                    deltaX = window_width - scaled_width
+                }
+            } else {
+                deltaX = 0
+            }
             $("#background-img").css({
                 height: "100%",
                 width: "auto",
-                transform: "translateX(" + ((centerX - anchorX) < 0 ? (centerX - anchorX) : 0) + "px)"
+                transform: "translateX(" + deltaX + "px)"
             })
         } else {
-            var anchorY = window_width / background_img_ratio * chosen_bg_image.anchorY
+            var scaled_height = window_width / background_img_ratio
+            var anchorY = scaled_height * chosen_bg_image.anchorY
+            var deltaY = 0
+            if (centerY - anchorY < 0) {
+                deltaY = centerY - anchorY
+                if (scaled_height + deltaY < window_height) {
+                    deltaY = window_height - scaled_height
+                }
+            } else {
+                deltaY = 0
+            }
             $("#background-img").css({
                 height: "auto",
                 width: "100%",
-                transform: "translateY(" + ((centerY - anchorY) < 0 ? (centerY - anchorY) : 0) +"px)"
+                transform: "translateY(" + deltaY +"px)"
             })
         }
     }
